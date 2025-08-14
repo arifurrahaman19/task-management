@@ -25,13 +25,13 @@ export const KanbanBoard: React.FC = () => {
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: {
-        distance: 8,
+        distance: 8, // start drag only after moving 8px (good for desktop)
       },
     }),
     useSensor(TouchSensor, {
       activationConstraint: {
-        delay: 100,
-        tolerance: 5,
+        delay: 150, // long press before drag
+        tolerance: 8, // allow a little movement without canceling drag
       },
     }),
     useSensor(KeyboardSensor, {
@@ -44,6 +44,16 @@ export const KanbanBoard: React.FC = () => {
       dispatch({ type: 'HYDRATE_FROM_STORAGE', payload: storedTasks });
     }
   }, []);
+
+  useEffect(() => {
+  const preventTouchScroll = (e: TouchEvent) => {
+    if (activeTask) e.preventDefault();
+  };
+  document.addEventListener('touchmove', preventTouchScroll, { passive: false });
+  return () => {
+    document.removeEventListener('touchmove', preventTouchScroll);
+  };
+}, [activeTask]);
 
   // Save to localStorage whenever tasks change
   useEffect(() => {
@@ -93,7 +103,7 @@ export const KanbanBoard: React.FC = () => {
     const { active } = event;
     const task = tasks.find((t: Task) => t.id === active.id);
     setActiveTask(task || null);
-    
+
     // Prevent page scroll during drag on mobile
     document.body.style.overflow = 'hidden';
   };
@@ -101,7 +111,7 @@ export const KanbanBoard: React.FC = () => {
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
     setActiveTask(null);
-    
+
     // Re-enable page scroll
     document.body.style.overflow = '';
 
@@ -125,16 +135,18 @@ export const KanbanBoard: React.FC = () => {
     const overTask = tasks.find((t: Task) => t.id === overId);
     if (overTask && overTask.status === activeTask.status) {
       const columnTasks = getTasksByStatus(activeTask.status);
-      const oldIndex = columnTasks.findIndex((t: Task) => t.id === activeTask.id);
+      const oldIndex = columnTasks.findIndex(
+        (t: Task) => t.id === activeTask.id
+      );
       const newIndex = columnTasks.findIndex((t: Task) => t.id === overId);
 
       if (oldIndex !== newIndex) {
         dispatch({
           type: 'REORDER_IN_COLUMN',
-          payload: { 
-            status: activeTask.status, 
-            activeId: activeTask.id, 
-            overId: overId 
+          payload: {
+            status: activeTask.status,
+            activeId: activeTask.id,
+            overId: overId,
           },
         });
       }
