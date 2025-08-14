@@ -5,6 +5,7 @@ import {
   closestCenter,
   KeyboardSensor,
   PointerSensor,
+  TouchSensor,
   useSensor,
   useSensors,
 } from '@dnd-kit/core';
@@ -27,7 +28,15 @@ export const KanbanBoard: React.FC = () => {
         distance: 8,
       },
     }),
-    useSensor(KeyboardSensor)
+    useSensor(TouchSensor, {
+      activationConstraint: {
+        delay: 100,
+        tolerance: 5,
+      },
+    }),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: () => ({ x: 0, y: 0 }),
+    })
   );
   useEffect(() => {
     const storedTasks = loadFromStorage();
@@ -84,11 +93,17 @@ export const KanbanBoard: React.FC = () => {
     const { active } = event;
     const task = tasks.find((t: Task) => t.id === active.id);
     setActiveTask(task || null);
+    
+    // Prevent page scroll during drag on mobile
+    document.body.style.overflow = 'hidden';
   };
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
     setActiveTask(null);
+    
+    // Re-enable page scroll
+    document.body.style.overflow = '';
 
     if (!over) return;
 
@@ -138,7 +153,7 @@ export const KanbanBoard: React.FC = () => {
       onDragEnd={handleDragEnd}
     >
       <div className="min-h-screen bg-background p-4">
-        <header className="mb-8">
+        <header className="mb-8 max-w-7xl mx-auto">
           <h1 className="text-3xl font-bold text-foreground mb-2">LYXA Todo</h1>
           <p className="text-muted-foreground">
             Organize your tasks with a clean, minimal Kanban board
@@ -169,14 +184,14 @@ export const KanbanBoard: React.FC = () => {
 
         <DragOverlay>
           {activeTask ? (
-            <div className="opacity-90 rotate-3 scale-105">
+            <div className="opacity-90 rotate-2 scale-105 shadow-2xl">
               <TaskCard
                 task={activeTask}
                 onMove={() => {}}
                 onSetDue={() => {}}
               />
             </div>
-          ) : <div className="opacity-0">Loading...</div>}
+          ) : null}
         </DragOverlay>
       </div>
     </DndContext>
