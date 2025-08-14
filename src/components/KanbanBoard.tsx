@@ -46,14 +46,16 @@ export const KanbanBoard: React.FC = () => {
   }, []);
 
   useEffect(() => {
-  const preventTouchScroll = (e: TouchEvent) => {
-    if (activeTask) e.preventDefault();
-  };
-  document.addEventListener('touchmove', preventTouchScroll, { passive: false });
-  return () => {
-    document.removeEventListener('touchmove', preventTouchScroll);
-  };
-}, [activeTask]);
+    const preventTouchScroll = (e: TouchEvent) => {
+      if (activeTask) e.preventDefault();
+    };
+    document.addEventListener('touchmove', preventTouchScroll, {
+      passive: false,
+    });
+    return () => {
+      document.removeEventListener('touchmove', preventTouchScroll);
+    };
+  }, [activeTask]);
 
   // Save to localStorage whenever tasks change
   useEffect(() => {
