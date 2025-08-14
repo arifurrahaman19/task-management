@@ -1,0 +1,98 @@
+@import 'tailwindcss';
+
+:root {
+  --background: hsl(240 10% 97%);
+  --foreground: hsl(240 10% 15%);
+
+  --border: 240 6% 90%;
+
+  /* Kanban Status Colors */
+  --status-new: hsl(210 100% 50%);
+  --status-new-foreground: hsl(0 0% 100%);
+  --status-ongoing: hsl(30 100% 50%);
+  --status-ongoing-foreground: hsl(0 0% 100%);
+  --status-done: hsl(145 60% 45%);
+  --status-done-foreground: hsl(0 0% 100%);
+
+  /* Overdue styling */
+  --overdue: hsl(0 75% 60%);
+  --overdue-foreground: hsl(0 0% 100%);
+
+  --card: hsl(0 0% 100%);
+  --card-foreground: hsl(240 10% 15%);
+
+  --destructive: hsl(0 75% 60%);
+  --destructive-foreground: hsl(0 0% 98%);
+
+  --primary: hsl(240 10% 15%);
+  --primary-foreground: hsl(0 0% 98%);
+
+  --secondary: hsl(240 5% 94%);
+  --secondary-foreground: hsl(240 10% 15%);
+
+  --popover: hsl(0 0% 100%);
+  --popover-foreground: hsl(240 10% 15%);
+
+  --accent: hsl(240 5% 94%);
+  --accent-foreground: hsl(240 10% 15%);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  --color-status-new: var(--status-new);
+  --color-status-new-foreground: var(--status-new-foreground);
+
+  --color-status-ongoing: var(--status-ongoing);
+  --color-status-ongoing-foreground: var(--status-ongoing-foreground);
+  --color-status-done: var(--status-done);
+  --color-status-done-foreground: var(--status-done-foreground);
+  --color-overdue: var(--overdue);
+  --color-overdue-foreground: var(--overdue-foreground);
+  --color-overdue: var(--overdue);
+  --color-overdue-foreground: var(--overdue-foreground);
+
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+}
+
+@utility border {
+  border-color: hsl(var(--border));
+}
+
+@utility line-clamp {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+}
+
+@utility line-clamp-2 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+@utility line-clamp-3 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+}
