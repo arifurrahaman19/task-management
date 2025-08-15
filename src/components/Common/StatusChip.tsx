@@ -1,6 +1,6 @@
 import React from 'react';
-import type { Status } from '../state/types';
-import { cn } from '../lib/utils';
+import type { Status } from '@/state/types';
+import { cn } from '@/lib/utils';
 
 interface StatusChipProps {
   status: Status;

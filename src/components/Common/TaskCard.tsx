@@ -1,18 +1,18 @@
 import React, { useState } from 'react';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import type { Task, Status } from '../state/types';
-import { StatusChip } from './StatusChip';
+import type { Task, Status } from '@/state/types';
+import { StatusChip } from "@/components/Common/StatusChip"
 import {
   ContextMenu,
   ContextMenuContent,
   ContextMenuItem,
   ContextMenuTrigger,
-} from './ui/context-menu';
-import { formatDateTime, formatDateTimeLocal, isOverdue } from '../lib/time';
-import { cn } from '../lib/utils';
+} from '@/components/ui/context-menu';
+import { formatDateTime, formatDateTimeLocal, isOverdue } from '@/lib/time';
+import { cn } from '@/lib/utils';
 import { MoreVertical } from 'lucide-react';
-import { Button } from './ui/button';
+import { Button } from '@/components/ui/button';
 
 interface TaskCardProps {
   task: Task;
@@ -79,7 +79,6 @@ export const TaskCard: React.FC<TaskCardProps> = ({
 
   const handleContextMenu = () => {
     const currentTime = Date.now();
-    // If the context menu was recently triggered (within 100ms), force remount
     if (currentTime - lastRightClickTime.current < 100) {
       setContextMenuKey((prev) => prev + 1);
     }

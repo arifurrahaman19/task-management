@@ -4,10 +4,10 @@ import {
   SortableContext,
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
-import type { Task, Status } from '../state/types';
+import type { Task, Status } from '@/state/types';
 import { TaskCard } from './TaskCard';
-import { NewTaskForm } from './NewTaskForm';
-import {cn} from '../lib/utils';
+import { NewTaskForm } from '@/components/Homepage/NewTaskForm';
+import { cn } from '@/lib/utils';
 
 interface ColumnProps {
   status: Status;

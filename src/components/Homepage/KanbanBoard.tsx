@@ -10,13 +10,13 @@ import {
   useSensors,
 } from '@dnd-kit/core';
 import type { DragEndEvent, DragStartEvent } from '@dnd-kit/core';
-import { Column } from './Column';
-import { TaskCard } from './TaskCard';
-import { taskReducer } from '../state/reducer';
-import { initialState } from '../state/initialState';
-import type { Status, Task } from '../state/types';
-import { saveToStorage, loadFromStorage } from '../lib/storage';
-import { isOverdue } from '../lib/time';
+import { Column } from '@/components/Common/Column';
+import { TaskCard } from '@/components/Common/TaskCard';
+import { taskReducer } from '@/state/reducer';
+import { initialState } from '@/state/initialState';
+import type { Status, Task } from '@/state/types';
+import { saveToStorage, loadFromStorage } from '@/lib/storage';
+import { isOverdue } from '@/lib/time';
 
 export const KanbanBoard: React.FC = () => {
   const [tasks, dispatch] = useReducer(taskReducer, initialState);
@@ -25,67 +25,19 @@ export const KanbanBoard: React.FC = () => {
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: {
-        distance: 8, // start drag only after moving 8px (good for desktop)
+        distance: 8,
       },
     }),
     useSensor(TouchSensor, {
       activationConstraint: {
-        delay: 150, // long press before drag
-        tolerance: 8, // allow a little movement without canceling drag
+        delay: 150,
+        tolerance: 8,
       },
     }),
     useSensor(KeyboardSensor, {
       coordinateGetter: () => ({ x: 0, y: 0 }),
     })
   );
-  useEffect(() => {
-    const storedTasks = loadFromStorage();
-    if (storedTasks.length > 0) {
-      dispatch({ type: 'HYDRATE_FROM_STORAGE', payload: storedTasks });
-    }
-  }, []);
-
-  useEffect(() => {
-    const preventTouchScroll = (e: TouchEvent) => {
-      if (activeTask) e.preventDefault();
-    };
-    document.addEventListener('touchmove', preventTouchScroll, {
-      passive: false,
-    });
-    return () => {
-      document.removeEventListener('touchmove', preventTouchScroll);
-    };
-  }, [activeTask]);
-
-  // Save to localStorage whenever tasks change
-  useEffect(() => {
-    saveToStorage(tasks);
-  }, [tasks]);
-
-  // Check for overdue tasks every 30 seconds
-
-  // Load from localStorage on mount
-  useEffect(() => {
-    const checkOverdueTasks = () => {
-      tasks.forEach((task: Task) => {
-        if (
-          task.status === 'ongoing' &&
-          task.dueAt &&
-          isOverdue(task.dueAt) &&
-          !task.overdueNotified
-        ) {
-          alert(`Task '${task.title}' is overdue.`);
-          dispatch({
-            type: 'MARK_OVERDUE_NOTIFIED',
-            payload: { id: task.id, value: true },
-          });
-        }
-      });
-    };
-
-    const interval = setInterval(checkOverdueTasks, 30000);
-    return () => clearInterval(interval);
-  }, [tasks]);
 
   const handleAddTask = (title: string, description?: string) => {
     dispatch({ type: 'ADD_TASK', payload: { title, description } });
@@ -105,16 +57,12 @@ export const KanbanBoard: React.FC = () => {
     const { active } = event;
     const task = tasks.find((t: Task) => t.id === active.id);
     setActiveTask(task || null);
-
-    // Prevent page scroll during drag on mobile
     document.body.style.overflow = 'hidden';
   };
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
     setActiveTask(null);
-
-    // Re-enable page scroll
     document.body.style.overflow = '';
 
     if (!over) return;
@@ -135,11 +83,13 @@ export const KanbanBoard: React.FC = () => {
 
     // Check if reordering within the same column
     const overTask = tasks.find((t: Task) => t.id === overId);
+
     if (overTask && overTask.status === activeTask.status) {
       const columnTasks = getTasksByStatus(activeTask.status);
       const oldIndex = columnTasks.findIndex(
         (t: Task) => t.id === activeTask.id
       );
+
       const newIndex = columnTasks.findIndex((t: Task) => t.id === overId);
 
       if (oldIndex !== newIndex) {
@@ -159,6 +109,51 @@ export const KanbanBoard: React.FC = () => {
     return tasks.filter((task: Task) => task.status === status);
   };
 
+  const checkOverdueTasks = () => {
+    tasks.forEach((task: Task) => {
+      if (
+        task.status === 'ongoing' &&
+        task.dueAt &&
+        isOverdue(task.dueAt) &&
+        !task.overdueNotified
+      ) {
+        alert(`Task '${task.title}' is overdue.`);
+        dispatch({
+          type: 'MARK_OVERDUE_NOTIFIED',
+          payload: { id: task.id, value: true },
+        });
+      }
+    });
+  };
+
+  useEffect(() => {
+    const storedTasks = loadFromStorage();
+    if (storedTasks.length > 0) {
+      dispatch({ type: 'HYDRATE_FROM_STORAGE', payload: storedTasks });
+    }
+  }, []);
+
+  useEffect(() => {
+    const preventTouchScroll = (e: TouchEvent) => {
+      if (activeTask) e.preventDefault();
+    };
+    document.addEventListener('touchmove', preventTouchScroll, {
+      passive: false,
+    });
+    return () => {
+      document.removeEventListener('touchmove', preventTouchScroll);
+    };
+  }, [activeTask]);
+
+  useEffect(() => {
+    saveToStorage(tasks);
+  }, [tasks]);
+
+  useEffect(() => {
+    const interval = setInterval(checkOverdueTasks, 30000);
+    return () => clearInterval(interval);
+  }, [tasks]);
+
   return (
     <DndContext
       sensors={sensors}
@@ -166,14 +161,7 @@ export const KanbanBoard: React.FC = () => {
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
     >
-      <div className="min-h-screen bg-background p-4">
-        <header className="mb-8 max-w-7xl mx-auto">
-          <h1 className="text-3xl font-bold text-foreground mb-2">LYXA Todo</h1>
-          <p className="text-muted-foreground">
-            Organize your tasks with a clean, minimal Kanban board
-          </p>
-        </header>
-
+      <div className="min-h-screen p-4">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
           <Column
             status="new"
