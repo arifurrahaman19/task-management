@@ -1,168 +1,97 @@
-# React + TypeScript + Vite
+# LYXA Todo App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern, responsive Kanban-style task management application designed for productivity and ease of use. Built with React, TypeScript, and Tailwind CSS to provide a seamless experience across all devices.
 
-Currently, two official plugins are available:
+## Key Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### Task Organization
+- **Three-Stage Workflow**: Organize tasks across New, Ongoing, and Done columns
+- **Visual Task Cards**: Clean, readable cards displaying task title, description, and status
+- **Task Counter**: See at a glance how many tasks are in each stage
 
-# LYXA Todo
+### Intuitive Drag & Drop
+- **Cross-Column Movement**: Drag tasks between columns to change their status
+- **Within-Column Reordering**: Arrange tasks in your preferred order within each column
+- **Mobile-Optimized**: Touch-friendly drag and drop that works perfectly on mobile devices
+- **Visual Feedback**: Tasks animate and provide clear visual cues during movement
 
-A responsive Kanban-style Todo application built with React, TypeScript, and Tailwind CSS.
+### Smart Due Date Management
+- **Due Date Setting**: Add due dates to ongoing tasks to stay on track
+- **Overdue Alerts**: Automatic notifications when tasks pass their due dates
+- **Visual Indicators**: Overdue tasks are clearly marked with distinctive styling
+- **One-Time Notifications**: Each task alerts only once to avoid notification spam
 
-## Features
+### Multiple Interaction Methods
+- **Drag & Drop**: Primary method for moving tasks around
+- **Context Menu**: Right-click any task for quick movement options
+- **Mobile-Friendly Buttons**: Tap the menu button on mobile for easy task management
 
-- **Three-Column Kanban Board**: New, Ongoing, and Done columns
-- **Task Management**: Create, move, and organize tasks
-- **Drag & Drop**: Drag tasks between columns and reorder within columns
-- **Due Dates & Overdue Alerts**: Set due dates for ongoing tasks with automatic overdue notifications
-- **Right-Click Context Menu**: Quick task movement between columns
-- **Responsive Design**: Desktop (3 columns) and mobile (stacked) layouts
-- **Local Storage Persistence**: Tasks are automatically saved and restored
-- **Accessibility**: Full keyboard navigation and screen reader support
+### Responsive Design
+- **Desktop Layout**: Three-column side-by-side view for maximum productivity
+- **Mobile Layout**: Stacked columns optimized for touch interaction
 
-## Tech Stack
-
-- **Frontend**: React 19 + TypeScript
-- **Styling**: Tailwind CSS v4
-- **Drag & Drop**: @dnd-kit/core + @dnd-kit/sortable
-- **Build Tool**: Vite
-- **Code Quality**: ESLint + Prettier
+### Data Persistence
+- **Local Storage**: Your tasks are automatically saved and restored between sessions
+- **No Account Required**: Start using immediately without creating accounts or logging in
 
 ## Getting Started
 
-### Prerequisites
+### What You'll Need
+- A modern web browser (Chrome, Firefox, Safari, or Edge)
+- Node.js version 20.19.0 or newer if you want to run it locally
 
-- Node.js (v20.19.0 or higher recommended)
-- npm
+### Quick Start
+1. **Download or Clone**: Get the project files to your computer
+2. **Install Dependencies**: Run the installation command to set up the project
+3. **Start the App**: Launch the development server
+4. **Open in Browser**: Navigate to the local address to start using LYXA Todo
 
-### Installation
+### Development Commands
 
-1. Clone the repository:
-   ```bash
-   git clone <repository-url>
-   cd lyxa-todo-app
-   ```
+Once you have the project set up locally, you can use these commands:
 
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
+```bash
+# Install dependencies
+npm install
 
-3. Start the development server:
-   ```bash
-   npm run dev
-   ```
+# Start development server (with hot reload)
+npm run dev
 
-4. Open your browser and navigate to `http://localhost:5173`
+# Build for production
+npm run build
 
-## Available Scripts
+# Preview production build locally
+npm run preview
 
-- `npm run dev` - Start development server
-- `npm run build` - Build for production
-- `npm run preview` - Preview production build
-- `npm run lint` - Run ESLint
-- `npm run lint:fix` - Fix ESLint issues
-- `npm run format` - Format code with Prettier
-- `npm run format:check` - Check code formatting
+# Run ESLint to check code quality
+npm run lint
 
-## Usage
+# Fix ESLint issues automatically
+npm run lint:fix
 
-### Creating Tasks
-1. Use the form in the "New" column to create tasks
-2. Enter a title (required) and optional description
-3. Click "Add Task" to create
+# Format code with Prettier
+npm run format
 
-### Moving Tasks
-- **Drag & Drop**: Click and drag tasks between columns or within the same column to reorder
-- **Right-click** on any task to open the context menu
-- **Click the ⋯ button** on any task for keyboard/mouse access
-- Select the destination column to move the task
-
-### Due Dates
-- Tasks in the "Ongoing" column can have due dates
-- Use the datetime input to set or modify due dates
-- Overdue tasks are marked with a red border and "Overdue" badge
-- Automatic alerts notify you when tasks become overdue
-
-### Responsive Design
-- **Desktop**: Three columns side by side
-- **Mobile**: Columns stack vertically with clear section headers
-
-### Drag & Drop Behavior
-- **Cross-Column**: Drag a task over another column to move it and update its status
-- **Within Column**: Drag tasks vertically to reorder them within the same column
-- **Ordering Rules**: 
-  - New tasks are created at the top of the "New" column
-  - Moving between columns appends to the bottom by default
-  - Manual reordering via drag & drop overrides automatic positioning
-- **Visual Feedback**: Tasks become semi-transparent and slightly rotated while dragging
-
-## Overdue Logic
-
-The app checks for overdue tasks every 30 seconds:
-1. Tasks in "Ongoing" status with `dueAt < current time` trigger alerts
-2. Each task shows an alert only once (`overdueNotified` flag)
-3. Updating the due date to a future time resets the overdue status
-4. Visual indicators (red border + "Overdue" badge) mark overdue tasks
-
-## Local Storage
-
-Tasks are automatically saved to localStorage and restored on page load. No external database required.
-
-## Project Structure
-
-```
-src/
-├── components/
-│   ├── Column/
-│   ├── ContextMenu/
-│   ├── NewTaskForm/
-│   └── TaskCard/
-├── lib/
-│   ├── storage.ts     # localStorage utilities
-│   └── time.ts        # date/time utilities
-├── state/
-│   ├── initialState.ts
-│   ├── reducer.ts     # task state management
-│   └── types.ts
-├── types/
-│   └── index.ts       # TypeScript interfaces
-├── App.tsx
-├── main.tsx
-└── index.css
+# Check if code is properly formatted
+npm run format:check
 ```
 
-## License
+**Most Common Commands:**
+- `npm run dev` - Start developing (this is what you'll use most)
+- `npm run lint` - Check your code before committing
+- `npm run build` - Create production build when ready to deploy
 
-MIT License
+## Technical Overview
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### Built With Modern Technology
+- **React 19**: Latest version for optimal performance and features
+- **TypeScript**: Type-safe code for reliability and maintainability
+- **Tailwind CSS v4**: Modern styling for beautiful, responsive design
+- **DND Kit**: Professional drag-and-drop functionality
+- **Vite**: Fast development and optimized builds
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+### Quality Assurance
+- **TypeScript**: Catches errors before they reach users
+- **ESLint**: Maintains consistent, high-quality code
+- **Responsive Testing**: Verified across different screen sizes and devices
+- **Accessibility Testing**: Ensures usability for all users
