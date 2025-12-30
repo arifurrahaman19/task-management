@@ -1,4 +1,4 @@
-# LYXA Todo App
+# LYPD Todo App
 
 A modern, responsive Kanban-style task management application designed for productivity and ease of use. Built with React, TypeScript, and Tailwind CSS to provide a seamless experience across all devices.
 
@@ -44,7 +44,7 @@ A modern, responsive Kanban-style task management application designed for produ
 1. **Download or Clone**: Get the project files to your computer
 2. **Install Dependencies**: Run the installation command to set up the project
 3. **Start the App**: Launch the development server
-4. **Open in Browser**: Navigate to the local address to start using LYXA Todo
+4. **Open in Browser**: Navigate to the local address to start using LYPD Todo
 
 ### Development Commands
 

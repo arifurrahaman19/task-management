@@ -1,6 +1,6 @@
 import type { Task } from '../state/types';
 
-const STORAGE_KEY = 'lyxa-todo-tasks';
+const STORAGE_KEY = 'lypd-todo-tasks';
 
 export const saveToStorage = (tasks: Task[]): void => {
   try {

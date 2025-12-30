@@ -9,9 +9,8 @@
   <!-- Background circle -->
   <circle cx="32" cy="32" r="30" fill="url(#gradient)" stroke="#1e40af" stroke-width="2"/>
   
-  <!-- LYXA text -->
   <text x="32" y="38" font-family="Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" fill="white">
-    LYXA
+    LYPD
   </text>
   
   <!-- Decorative elements -->
