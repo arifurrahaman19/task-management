@@ -1,40 +1,45 @@
 @import 'tailwindcss';
 
 :root {
-  --background: hsl(240 10% 97%);
-  --foreground: hsl(240 10% 15%);
+  --background: hsl(210 20% 98%);
+  --foreground: hsl(222 47% 11%);
 
-  --border: 240 6% 90%;
+  --border: 214.3 31.8% 91.4%;
 
   /* Kanban Status Colors */
-  --status-new: hsl(210 100% 50%);
-  --status-new-foreground: hsl(0 0% 100%);
-  --status-ongoing: hsl(30 100% 50%);
-  --status-ongoing-foreground: hsl(0 0% 100%);
-  --status-done: hsl(145 60% 45%);
-  --status-done-foreground: hsl(0 0% 100%);
+  --status-new: hsl(199 89% 48%);
+  --status-new-foreground: hsl(210 20% 98%);
+  --status-ongoing: hsl(38 92% 50%);
+  --status-ongoing-foreground: hsl(210 20% 98%);
+  --status-done: hsl(142 71% 45%);
+  --status-done-foreground: hsl(210 20% 98%);
 
   /* Overdue styling */
-  --overdue: hsl(0 75% 60%);
-  --overdue-foreground: hsl(0 0% 100%);
+  --overdue: hsl(0 84.2% 60.2%);
+  --overdue-foreground: hsl(210 20% 98%);
 
   --card: hsl(0 0% 100%);
-  --card-foreground: hsl(240 10% 15%);
+  --card-foreground: hsl(222 47% 11%);
 
-  --destructive: hsl(0 75% 60%);
-  --destructive-foreground: hsl(0 0% 98%);
+  --destructive: hsl(0 84.2% 60.2%);
+  --destructive-foreground: hsl(210 40% 98%);
 
-  --primary: hsl(240 10% 15%);
-  --primary-foreground: hsl(0 0% 98%);
+  --primary: hsl(222.2 47.4% 11.2%);
+  --primary-foreground: hsl(210 40% 98%);
 
-  --secondary: hsl(240 5% 94%);
-  --secondary-foreground: hsl(240 10% 15%);
+  --secondary: hsl(210 40% 96.1%);
+  --secondary-foreground: hsl(222.2 47.4% 11.2%);
 
   --popover: hsl(0 0% 100%);
-  --popover-foreground: hsl(240 10% 15%);
+  --popover-foreground: hsl(222.2 47.4% 11.2%);
 
-  --accent: hsl(240 5% 94%);
-  --accent-foreground: hsl(240 10% 15%);
+  --accent: hsl(210 40% 96.1%);
+  --accent-foreground: hsl(222.2 47.4% 11.2%);
+
+  --muted: hsl(210 40% 96.1%);
+  --muted-foreground: hsl(215.4 16.3% 46.9%);
+
+  --ring: hsl(215 20.2% 65.1%);
 }
 
 @theme inline {
@@ -70,6 +75,60 @@
 
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
+
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+
+  --color-ring: var(--ring);
+
+  --animate-in: in 0.2s ease-out;
+  --animate-out: out 0.2s ease-in;
+  --animate-fade-in: fade-in 0.2s ease-out;
+  --animate-zoom-in: zoom-in 0.2s ease-out;
+  --animate-slide-in-from-top: slide-in-from-top 0.2s ease-out;
+  --animate-slide-in-from-bottom: slide-in-from-bottom 0.2s ease-out;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes zoom-in {
+  from {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes slide-in-from-top {
+  from {
+    transform: translateY(-10px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slide-in-from-bottom {
+  from {
+    transform: translateY(10px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
 @utility border {

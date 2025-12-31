@@ -1,5 +1,5 @@
 import React from 'react';
-import type { Status } from '@/state/types';
+import type { Status } from '@/types';
 import { cn } from '@/lib/utils';
 
 interface StatusChipProps {

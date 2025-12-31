@@ -1,26 +1,30 @@
-import React, { useReducer, useEffect } from 'react';
+import { Column } from '@/components/Common/Column';
+import { TaskCard } from '@/components/Common/TaskCard';
+import { TaskModal } from '@/components/Common/TaskModal';
+import { useTasks } from '@/contexts/TaskContext';
+import { useToast } from '@/hooks/use-toast';
+import { isOverdue } from '@/lib/time';
+import type { Status, Task } from '@/types';
+import type { DragEndEvent, DragStartEvent } from '@dnd-kit/core';
 import {
+  closestCenter,
   DndContext,
   DragOverlay,
-  closestCenter,
   KeyboardSensor,
   PointerSensor,
   TouchSensor,
   useSensor,
   useSensors,
 } from '@dnd-kit/core';
-import type { DragEndEvent, DragStartEvent } from '@dnd-kit/core';
-import { Column } from '@/components/Common/Column';
-import { TaskCard } from '@/components/Common/TaskCard';
-import { taskReducer } from '@/state/reducer';
-import { initialState } from '@/state/initialState';
-import type { Status, Task } from '@/state/types';
-import { saveToStorage, loadFromStorage } from '@/lib/storage';
-import { isOverdue } from '@/lib/time';
+import React, { useCallback, useEffect, useState } from 'react';
 
 export const KanbanBoard: React.FC = () => {
-  const [tasks, dispatch] = useReducer(taskReducer, initialState);
-  const [activeTask, setActiveTask] = React.useState<Task | null>(null);
+  const { tasks, dispatch, getTasksByStatus } = useTasks();
+  const { toast } = useToast();
+  const [activeTask, setActiveTask] = useState<Task | null>(null);
+  const [selectedTaskId, setSelectedTaskId] = useState<string | null>(null);
+
+  const selectedTask = tasks.find((t) => t.id === selectedTaskId);
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -41,16 +45,6 @@ export const KanbanBoard: React.FC = () => {
 
   const handleAddTask = (title: string, description?: string) => {
     dispatch({ type: 'ADD_TASK', payload: { title, description } });
-  };
-
-  const handleMoveTask = (id: string, toStatus: Status) => {
-    dispatch({ type: 'MOVE_TASK', payload: { id, toStatus } });
-  };
-
-  const handleSetDue = (id: string, dueAt?: string) => {
-    if (dueAt) {
-      dispatch({ type: 'SET_DUE', payload: { id, dueAt } });
-    }
   };
 
   const handleDragStart = (event: DragStartEvent) => {
@@ -76,7 +70,10 @@ export const KanbanBoard: React.FC = () => {
     if (['new', 'ongoing', 'done'].includes(overId)) {
       const newStatus = overId as Status;
       if (activeTask.status !== newStatus) {
-        handleMoveTask(activeTask.id, newStatus);
+        dispatch({
+          type: 'MOVE_TASK',
+          payload: { id: activeTask.id, toStatus: newStatus },
+        });
       }
       return;
     }
@@ -105,11 +102,7 @@ export const KanbanBoard: React.FC = () => {
     }
   };
 
-  const getTasksByStatus = (status: Status): Task[] => {
-    return tasks.filter((task: Task) => task.status === status);
-  };
-
-  const checkOverdueTasks = () => {
+  const checkOverdueTasks = useCallback(() => {
     tasks.forEach((task: Task) => {
       if (
         task.status === 'ongoing' &&
@@ -117,21 +110,18 @@ export const KanbanBoard: React.FC = () => {
         isOverdue(task.dueAt) &&
         !task.overdueNotified
       ) {
-        alert(`Task '${task.title}' is overdue.`);
+        toast({
+          title: 'Task Overdue',
+          description: `Task "${task.title}" is past its due date!`,
+          variant: 'destructive',
+        });
         dispatch({
           type: 'MARK_OVERDUE_NOTIFIED',
           payload: { id: task.id, value: true },
         });
       }
     });
-  };
-
-  useEffect(() => {
-    const storedTasks = loadFromStorage();
-    if (storedTasks.length > 0) {
-      dispatch({ type: 'HYDRATE_FROM_STORAGE', payload: storedTasks });
-    }
-  }, []);
+  }, [tasks, dispatch, toast]);
 
   useEffect(() => {
     const preventTouchScroll = (e: TouchEvent) => {
@@ -146,13 +136,9 @@ export const KanbanBoard: React.FC = () => {
   }, [activeTask]);
 
   useEffect(() => {
-    saveToStorage(tasks);
-  }, [tasks]);
-
-  useEffect(() => {
     const interval = setInterval(checkOverdueTasks, 30000);
     return () => clearInterval(interval);
-  }, [tasks]);
+  }, [checkOverdueTasks]);
 
   return (
     <DndContext
@@ -167,34 +153,34 @@ export const KanbanBoard: React.FC = () => {
             status="new"
             tasks={getTasksByStatus('new')}
             onAddTask={handleAddTask}
-            onMoveTask={handleMoveTask}
-            onSetDue={handleSetDue}
+            onTaskClick={(task) => setSelectedTaskId(task.id)}
           />
           <Column
             status="ongoing"
             tasks={getTasksByStatus('ongoing')}
-            onMoveTask={handleMoveTask}
-            onSetDue={handleSetDue}
+            onTaskClick={(task) => setSelectedTaskId(task.id)}
           />
           <Column
             status="done"
             tasks={getTasksByStatus('done')}
-            onMoveTask={handleMoveTask}
-            onSetDue={handleSetDue}
+            onTaskClick={(task) => setSelectedTaskId(task.id)}
           />
         </div>
 
         <DragOverlay>
           {activeTask ? (
             <div className="opacity-90 rotate-2 scale-105 shadow-2xl">
-              <TaskCard
-                task={activeTask}
-                onMove={() => {}}
-                onSetDue={() => {}}
-              />
+              <TaskCard task={activeTask} />
             </div>
           ) : null}
         </DragOverlay>
+
+        {selectedTask && (
+          <TaskModal
+            task={selectedTask}
+            onClose={() => setSelectedTaskId(null)}
+          />
+        )}
       </div>
     </DndContext>
   );
